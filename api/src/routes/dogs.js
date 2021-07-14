@@ -22,10 +22,10 @@ async function getDogs(dogName){
                   [Op.like]: `%${dogName}%`,
                 },
               },
-              attributes: ["name", ["image", "background_image"], "rating", "id"],
+              attributes: ["name", "image", "id", "weight"],
               include: [
                 {
-                  model: Genre,
+                  model: Temperament,
                 },
               ],
             });
@@ -81,6 +81,26 @@ async function getDogInfo(dogID){
 
 router.get("/dogs", async (req, res) => {
     try {
+      const dogList = await Dog.findAll()
+
+      if (dogList.length === 0){
+        const {data} = await axios.get(`https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`)
+        const tempIDs = await Temperament.findAll()
+        const dbClean = []
+        console.log(data.length)
+
+        for (let i = 0; i < data.length; i++) {
+          if(data[i].temperament){
+            let aux = data[i].temperament.split(",")
+            for (let j = 0; j < aux.length; j++) {
+              let aux2 = aux[j].trim()
+              console.log(aux2)
+            }
+          }
+          
+        }
+        res.json(data)
+      }
         
     //   if (req.query.name) {
     //     const dogName = req.query.name;

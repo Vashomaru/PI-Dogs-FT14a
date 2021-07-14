@@ -14,7 +14,7 @@ router.get("/temperament", async (req, res) => {
                 `https://api.thedogapi.com/v1/breeds?apikey=${API_KEY}`
             );
 
-            const auxArray = [];
+            const auxArray = ["Unknown"];
             
             for (let i = 0; i < data.length; i++) {
                 if (data[i].temperament) {
