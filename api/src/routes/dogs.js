@@ -2,14 +2,14 @@ require("dotenv").config();
 const axios = require("axios").default;
 const { Router } = require("express");
 const { API_KEY } = process.env;
-const { v4: uuidv4 } = require("uuid");
+//const { v4: uuidv4 } = require("uuid");
 const { Op } = require("sequelize");
 const { Dog, Temperament } = require("../db");
 const router = Router();
 
-const regexUUID = new RegExp(
-  /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
-);
+// const regexUUID = new RegExp(
+//   /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+// );
 
 
 
@@ -87,7 +87,6 @@ router.get("/dogs", async (req, res) => {
       const { data } = await axios.get(`https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`)
       const tempIDs = await Temperament.findAll()
       const dbClean = []
-      
 
       for (let i = 0; i < data.length; i++) {
         if (data[i].temperament) {
@@ -119,11 +118,31 @@ router.get("/dogs", async (req, res) => {
         }
 
       }
-      res.json(dbClean)
+      console.log("esto es dbClean lenght",dbClean.length)
+      //res.json(dbClean) 
+      
+      for (let a = 0; a < dbClean.length; a++) {
+        const [auxDog , created] = await Dog.findOrCreate({
+          where :{
+            name : dbClean[a].name
+          } ,
+          defaults : {
+            height: dbClean[a].height ,
+            weight : dbClean[a].weight ,
+            image : dbClean[a].image ,
+            life_span : dbClean[a].life_span
+          }
+        })
+        if(created) {
+          await auxDog.setTemperaments(dbClean[a].temperament)
+          dogList.push(auxDog)
+        }
+      }
+
     }
 
 
-    //res.json(dogList)
+    res.json(dogList)
 
     //   if (req.query.name) {
     //     const dogName = req.query.name;
