@@ -7,10 +7,65 @@ const { Op } = require("sequelize");
 const { Dog, Temperament } = require("../db");
 const router = Router();
 
-// const regexUUID = new RegExp(
-//   /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
-// );
 
+async function fillDB(){
+  const { data } = await axios.get(`https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`)
+  const tempIDs = await Temperament.findAll()
+  const dbClean = []
+  
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].temperament) {
+      let aux = data[i].temperament.split(",")
+      
+      let auxIDsArray = aux.map(item => {
+        let trimmed = item.trim()
+        let index = tempIDs.findIndex(temp => temp.name === trimmed)
+        return tempIDs[index].id
+      })
+      
+      dbClean.push({
+        name : data[i].name ,
+        weight : data[i].weight.metric ,
+        height : data[i].height.metric ,
+        life_span : data[i].life_span ,
+        image : data[i].image.url ,
+        temperament : auxIDsArray
+      })
+    }else{
+      dbClean.push({
+        name : data[i].name ,
+        weight : data[i].weight.metric ,
+        height : data[i].height.metric ,
+        life_span : data[i].life_span ,
+        image : data[i].image.url ,
+        temperament : [120]
+      })
+    }
+
+  }
+        
+  for (let a = 0; a < dbClean.length; a++) {
+    const [auxDog , created] = await Dog.findOrCreate({
+      where :{
+        name : dbClean[a].name
+      } ,
+      defaults : {
+        height: dbClean[a].height ,
+        weight : dbClean[a].weight ,
+        image : dbClean[a].image ,
+        life_span : dbClean[a].life_span
+      }
+    })
+    if(created) {
+      await auxDog.setTemperaments(dbClean[a].temperament)
+    }
+  }
+
+  const result = await Dog.findAll({include : [{model: Temperament}]})
+  return result 
+  
+
+}
 
 
 async function getDogs(dogName) {
@@ -30,44 +85,13 @@ async function getDogs(dogName) {
         ],
       });
 
-      const apiResult = await axios.get(
-        `https://api.rawg.io/api/games?key=${API_KEY}&search=${dogName}`
-      );
-
-      const filteredApiResult = apiResult.data.results.map((element) => {
-        const { name, background_image, genres, rating, id, ...rest } = element;
-        return { name, background_image, genres, rating, id };
-      });
-
       const response = dbResult.concat(filteredApiResult);
       return response;
     }
 
-    else {
-      const dbResult = await Dog.findAll({
-        attributes: ["name", ["image", "background_image"], "rating", "id"],
-        include: [
-          {
-            model: Genre,
-          },
-        ],
-      });
-
-      const apiResult = await axios.get(
-        `https://api.rawg.io/api/games?key=${API_KEY}`
-      );
-
-      const filteredApiResult = apiResult.data.results.map((element) => {
-        const { name, background_image, genres, rating, id, ...rest } = element;
-        return { name, background_image, genres, rating, id };
-      });
-
-      const response = dbResult.concat(filteredApiResult);
-      return response;
-    }
 
   } catch (err) {
-
+    console.log(err)
   }
 }
 
@@ -81,66 +105,16 @@ async function getDogInfo(dogID) {
 
 router.get("/dogs", async (req, res) => {
   try {
-    const dogList = await Dog.findAll()
+    let dogList = await Dog.findAll({include : [{model: Temperament}]})
 
-    if (dogList.length === 0) {
-      const { data } = await axios.get(`https://api.thedogapi.com/v1/breeds?api_key=${API_KEY}`)
-      const tempIDs = await Temperament.findAll()
-      const dbClean = []
+    if (dogList.length === 0) dogList = await fillDB()
 
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].temperament) {
-          let aux = data[i].temperament.split(",")
-          
-          let auxIDsArray = aux.map(item => {
-            let trimmed = item.trim()
-            let index = tempIDs.findIndex(temp => temp.name === trimmed)
-            return tempIDs[index].id
-          })
-          
-          dbClean.push({
-            name : data[i].name ,
-            weight : data[i].weight.metric ,
-            height : data[i].height.metric ,
-            life_span : data[i].life_span ,
-            image : data[i].image.url ,
-            temperament : auxIDsArray
-          })
-        }else{
-          dbClean.push({
-            name : data[i].name ,
-            weight : data[i].weight.metric ,
-            height : data[i].height.metric ,
-            life_span : data[i].life_span ,
-            image : data[i].image.url ,
-            temperament : [120]
-          })
-        }
-
-      }
-      console.log("esto es dbClean lenght",dbClean.length)
-      //res.json(dbClean) 
-      
-      for (let a = 0; a < dbClean.length; a++) {
-        const [auxDog , created] = await Dog.findOrCreate({
-          where :{
-            name : dbClean[a].name
-          } ,
-          defaults : {
-            height: dbClean[a].height ,
-            weight : dbClean[a].weight ,
-            image : dbClean[a].image ,
-            life_span : dbClean[a].life_span
-          }
-        })
-        if(created) {
-          await auxDog.setTemperaments(dbClean[a].temperament)
-          dogList.push(auxDog)
-        }
-      }
-
+    
+    if (req.query.name) {
+      const dogName = req.query.name
+      const result = await getDogs(dogName)
+      return res.json(result)
     }
-
 
     res.json(dogList)
 
