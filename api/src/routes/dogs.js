@@ -101,14 +101,13 @@ async function getDogInfo(dogID) {
     const id = Number.parseInt(dogID)
     if(id){
       const dog = await Dog.findByPk(id, {include: [{ model: Temperament }]});
-      console.log(dog)
       if (dog) return dog;
       else return null
     }
     else return null
 
   } catch (err) {
-
+    console.log(err)
   }
 }
 
@@ -149,9 +148,30 @@ router.get("/dogs/:idDog", async (req, res) => {
 router.post("/dog", async (req, res) => {
   try {
     const dog = req.body;
+    dog.name = dog.name.charAt(0).toUpperCase() + dog.name.slice(1)
+    
+    const [auxDog, created] = await Dog.findOrCreate({
+      where: {
+        name: dog.name
+      },
+      defaults: {
+        height: dog.height,
+        weight: dog.weight,
+        image: dog.image,
+        life_span: dog.life_span,
+        created : true
+      }
+    })
+    if (created) {
+      await auxDog.setTemperaments(dog.temperament)
+      return res.send({result : "La nueva raza se ha creado con exito"})
+    }
+    if(auxDog && !created) return res.send({result :"No se ha creado una nueva raza porque ya existe en la base de datos"})
+    else res.send({result :"La informacion emitida ha sido incorrecta por lo que no se ha creado la nueva raza"})
+
     res.json(dog)
   } catch (err) {
-    res.send(err);
+    res.status(400).send({error : "La informacion emitida ha sido incorrecta por lo que no se ha creado la nueva raza"});
   }
 
 });
