@@ -12,8 +12,10 @@ function Landing() {
 
   return (
     <div className="Landing">
-      <h1>SOY LANDING</h1>
-      <LinkButton route="/dogs" value="Entrar al sitio" />
+        <div className="Img-Container">
+            <h1>SOY LANDING</h1>
+            <LinkButton route="/dogs" value="Entrar al sitio" />
+        </div>      
     </div>
   );
 }

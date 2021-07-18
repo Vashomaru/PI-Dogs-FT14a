@@ -2,6 +2,8 @@ import './App.css';
 import { BrowserRouter as Router , Switch , Route } from 'react-router-dom'
 import Landing from './modules/landing/landing.component';
 import Home from './modules/home/home.component';
+import DogDetail from './modules/dog-detail/dog-detail.component';
+import CreateDog from './modules/create-dog/create-dog.component';
 
 function App() {
   return (
@@ -11,12 +13,12 @@ function App() {
         <Route exact path="/">
           <Landing/>
         </Route>
-        {/* <Route path="/api/create">
-          <CreateGame/>
+        <Route path="/dogs/create">
+          <CreateDog/>
         </Route>
-        <Route path="/api/:id">
-          <Details/>
-        </Route> */}
+        <Route path="/dogs/:id">
+          <DogDetail/>
+        </Route>
         <Route path="/dogs">
           <Home/>
         </Route>

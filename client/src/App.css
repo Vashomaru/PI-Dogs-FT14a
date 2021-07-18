@@ -1,3 +1,25 @@
 .App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
   text-align: center;
+  background-color: hsl(44, 69%, 68%);
+  width: 100vw;
+  height: 100vh;
+}
+.Img-Container {
+  
+  width: 85vw;
+  height: 85vh;
+  background: url("https://www.vets4pets.com/siteassets/species/dog/large-dog-on-walk-looking-over-hills.jpg?w=585&scale=down") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  
+}
+h1 {
+  margin: 0;
 }
