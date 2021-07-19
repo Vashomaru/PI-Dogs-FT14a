@@ -1,22 +1,31 @@
+import { useState , useEffect } from 'react'
 
 function SearchBar(props){
     const { state , setState } = props
-    console.log("holis")
+    const stateToFilter = [...state]
+    const [searchBarState, setSearchBarState] = useState("")
 
     const handleChange = (e)=>{
         e.preventDefault()
-        if(e.target.value !== ""){
-            const filteredState = state.filter(item =>{
-                return item.name.toLowerCase().includes(e.target.value.toLowerCase)
+        setSearchBarState(e.target.value)
+    }
+
+    useEffect(()=>{
+        if(searchBarState !== ""){
+            const filteredState = stateToFilter.filter(item =>{
+                //console.log("ESTO ES ITEM NAME ", item.name , "ESTO ES TARGET VALUE ", e.target.value)
+                return item.name.toLowerCase().includes(searchBarState.toLowerCase())
             })
-    
+            console.log("ESTO ES FILTERED STATE",filteredState)
             setState(filteredState)
         }
-    }
+        
+    },[searchBarState])
+
 
     return(
         <div className="SearchBar">
-            <input type="search" onChange={handleChange}></input>
+            <input type="search" value={searchBarState} onChange={handleChange}></input>
         </div>
     )
 
