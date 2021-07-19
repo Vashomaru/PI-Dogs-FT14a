@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import LinkButton from "../link-button/link-button.component";
 import CardContainer from "../card-container/card-container.component";
 import { getTemperaments, getDogs } from "../../store/actions";
+import Footer from "../footer/footer.component";
 
 function Home() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ function Home() {
       {/* <CardContainer state={dogs}/> */}
       {/* <SearchBar state={localState} setState={setLocalState} /> */}
       {/* <CardContainer/> */}
+      <Footer/>
     </div>
   );
 }
