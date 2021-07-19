@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getDogDetail } from "../../store/actions";
+import LinkButton from "../link-button/link-button.component";
 
 function DogDetail() {
   const { id } = useParams();
@@ -12,22 +13,30 @@ function DogDetail() {
     dispatch(getDogDetail(id));
   }, []);
 
+  if (detail.temperaments !== undefined) {
+    console.log("esto es detail", detail);
+  }
+
   return (
     <div className="Detail">
-        <h1>Soy Detail</h1>
-        <h2>{detail.name}</h2>
-      {/* {detail.error ? <div>{detail.error}</div> :
-      <GameCardBig
-      name={detail.name}
-      image={detail.background_image}
-      genres={detail.genres}
-      description={detail.description_raw}
-      release={detail.released}
-      rating={detail.rating}
-      platforms={detail.platforms}
-      id={detail.id}
-    /> } */}
-      
+      <LinkButton route={"/dogs"} value={"Volver"} />
+      <h1>{detail.name}</h1>
+      <h2>{`Life Span: ${detail.life_span}`}</h2>
+      <h2>{`Weight: ${detail.weight}`}</h2>
+      <h2>{`Height: ${detail.height}`}</h2>
+      <div>
+        <img src={detail.image} alt={`${detail.name} dog`} />
+        <ul className="container">
+          {detail.temperaments !== undefined &&
+            detail.temperaments.map((item, index) => {
+              return (
+                <li key={index}>
+                  <p>{item.name}</p>
+                </li>
+              );
+            })}
+        </ul>
+      </div>
     </div>
   );
 }

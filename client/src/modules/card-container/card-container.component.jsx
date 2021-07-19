@@ -8,6 +8,7 @@ function CardContainer(props){
     const [cardState , setCardState] = useState(state)
     const [visiblePage , setVisiblePage] = useState(initialVisible)
     const [pageIndex , setPageIndex] = useState(1)
+    // CREAR ESTADO PARA EL ORDEN Y CREADOS, HACER BOTONES COMPONENTES
 
     const handleButtonClick = (e)=>{
         e.preventDefault()
@@ -20,12 +21,12 @@ function CardContainer(props){
 
     useEffect(() => {
         setPageIndex(1)
-        const aux = cardState.slice((pageIndex -1) * 8 , (pageIndex * 8)-1)
+        const aux = cardState.slice((pageIndex -1) * 8 , (pageIndex * 8))
         setVisiblePage(aux)
       }, [cardState]);
 
     useEffect(() => {
-        const aux = cardState.slice((pageIndex -1) * 8 , (pageIndex * 8)-1)
+        const aux = cardState.slice((pageIndex -1) * 8 , (pageIndex * 8))
         setVisiblePage(aux)
       }, [pageIndex]);
 
@@ -37,7 +38,7 @@ function CardContainer(props){
             <SearchBar state={state} setState={setCardState}/>
             <button name="prev" className="pageButton" onClick={handleButtonClick}>{"<<<"}</button>
             <button name="next" className="pageButton" onClick={handleButtonClick}>{">>>"}</button>
-            <ul>
+            <ul className="card-grid">
                 {visiblePage.length && visiblePage.map(item=>{
                 return <DogCard dog={item}
                                 key={item.id}/>

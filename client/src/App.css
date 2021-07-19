@@ -20,11 +20,49 @@
   background-size: cover;
   
 }
-h1 {
+h1, h2 , h3 , p {
   margin: 0;
+}
+
+p{
+  font-size: 20px;
+}
+
+.DogCard {
+  margin: 5px;
+  border-style: dashed;
+  border-width: 5px;
+  border-radius: 15%;
+  border-color: hsl(44, 55%, 43%);
 }
 
 .DogCard img {
   max-width: 250px;
   max-height: 250px;
+}
+
+
+.Detail img {
+  max-width: 70%;
+  max-height: 70%;
+
+}
+
+.Detail{
+  width: auto;
+  height: auto;
+}
+
+.card-grid , .container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 10px;
+}
+
+.grid-item {
+  grid-column-start: span 2;
+}
+
+ul {
+  list-style-type: none;
 }
