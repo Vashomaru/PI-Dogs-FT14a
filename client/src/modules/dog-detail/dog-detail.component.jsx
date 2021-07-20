@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getDogDetail } from "../../store/actions";
 import LinkButton from "../link-button/link-button.component";
+import Header from "../header/header.component";
+import Footer from "../footer/footer.component";
 
 function DogDetail() {
   const { id } = useParams();
@@ -13,12 +15,10 @@ function DogDetail() {
     dispatch(getDogDetail(id));
   }, []);
 
-  if (detail.temperaments !== undefined) {
-    console.log("esto es detail", detail);
-  }
 
   return (
     <div className="Detail">
+      <Header/>
       <LinkButton route={"/dogs"} value={"Volver"} />
       <h1>{detail.name}</h1>
       <h2>{`Life Span: ${detail.life_span}`}</h2>
@@ -37,6 +37,7 @@ function DogDetail() {
             })}
         </ul>
       </div>
+      <Footer/>
     </div>
   );
 }

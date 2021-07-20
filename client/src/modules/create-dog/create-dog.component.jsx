@@ -2,8 +2,11 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getTemperaments } from "../../store/actions";
+import { getTemperaments , getDogs } from "../../store/actions";
 import LinkButton from "../link-button/link-button.component";
+import Header from "../header/header.component";
+import Footer from "../footer/footer.component";
+
 
 function CreateDog() {
   const temperaments = useSelector((state) => state.temperaments);
@@ -73,9 +76,12 @@ function CreateDog() {
             }
             
             const response = await axios.post("http://localhost:3001/dog", body)
-          console.log( temperamentState , tempIDs )
-          console.log("FORM ENVIADA WOHOO");
-          console.log(response)
+            
+            if(response.data.result === "La nueva raza se ha creado con exito"){
+                dispatch(getDogs)
+                history.push("/dogs")
+            }
+            
         }
       } catch (err) {
           console.log(err)
@@ -212,6 +218,7 @@ function CreateDog() {
 
   return (
     <div className="CreateDog">
+      <Header/>
       <LinkButton
         className="create-dog link-button"
         route={"/dogs"}
@@ -344,6 +351,7 @@ function CreateDog() {
         src="https://happydogclipsandkennels.files.wordpress.com/2019/08/happy-dog-country-clips-and-kennels-happy-dog-photos-1.png"
         alt="happy dog"
       />
+    <Footer/>
     </div>
   );
 }

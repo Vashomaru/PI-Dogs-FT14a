@@ -4,6 +4,7 @@ import LinkButton from "../link-button/link-button.component";
 import CardContainer from "../card-container/card-container.component";
 import { getTemperaments, getDogs } from "../../store/actions";
 import Footer from "../footer/footer.component";
+import Header from "../header/header.component";
 
 function Home() {
   const dispatch = useDispatch();
@@ -17,21 +18,15 @@ function Home() {
     if (dogs.length < 1) {
       dispatch(getDogs());
     }
-  }, []);
-
-
-  // HACER UN CONTAINER PARA EL SEARCHBOX Y EL LAS CARDS JUNTO CON EL ESTADO, PASARLE EL ESTADO DE REDUX COMO PROPS
+  }, [temperaments, dogs]);
 
   
 
   return (
     <div className="Home">
-      <LinkButton route="/dogs/create" value="Agregar una nueva Raza" />
-      <h1>SOY HOME</h1>
-      {dogs.length > 1 && <CardContainer state={dogs}/>}
-      {/* <CardContainer state={dogs}/> */}
-      {/* <SearchBar state={localState} setState={setLocalState} /> */}
-      {/* <CardContainer/> */}
+      <Header/>  
+      <LinkButton route="/dogs/create" value="Add a new breed" />
+      {dogs.length > 1 && <CardContainer state={dogs} temperament={temperaments}/>}
       <Footer/>
     </div>
   );

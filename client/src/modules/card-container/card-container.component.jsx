@@ -3,18 +3,25 @@ import SearchBar from "../search-bar/search-bar.component"
 import DogCard from '../dog-card/dog-card.component'
 
 function CardContainer(props){
-    const { state } = props
+    const { state , temperament } = props
     const initialVisible = state.slice(0,8)
     const [cardState , setCardState] = useState(state)
     const [visiblePage , setVisiblePage] = useState(initialVisible)
     const [pageIndex , setPageIndex] = useState(1)
-    // CREAR ESTADO PARA EL ORDEN Y CREADOS, HACER BOTONES COMPONENTES
+    const [order , setOrder] = useState("ASC")
+    const [type, setType] = useState("NAME")
+    const [temperamentFilter , setTemperamentFilter] = useState("")
+    const [originFilter , setOriginFilter] = useState("ALL")
+
 
     const handleButtonClick = (e)=>{
         e.preventDefault()
-        console.log(cardState.length , cardState.length / (pageIndex * 8))
         if(e.target.name === "next" && (cardState.length / (pageIndex * 8)) > 1) setPageIndex(pageIndex + 1)
         if(e.target.name === "prev" && pageIndex > 1) setPageIndex(pageIndex - 1)
+        if(e.target.name === "order"){
+            if(e.target.value === "ASC") setOrder("DESC")
+            if(e.target.value === "DESC") setOrder("ASC")
+        }
         return
 
     }
@@ -35,9 +42,39 @@ function CardContainer(props){
 
     return(
         <div className="CardContainer">
-            <SearchBar state={state} setState={setCardState}/>
+            <label htmlFor="search-bar">Search: </label>
+            <SearchBar id="search-bar" state={state} setState={setCardState}/>
+            <label htmlFor="sort">Sort by:</label>
+            <div id="sort">
+            <button name="order" onClick={handleButtonClick}>{order}</button>
+            <button name="type" onClick={handleButtonClick}>{type}</button>
+            </div>
+            <label htmlFor="filter">Filter by</label>
+            <div id="filter">
+            <button name="origen" onClick={handleButtonClick}>ALL</button>
+            {temperament.length && (
+            <select
+              name="temperaments"
+              id="temperaments"
+              onChange={e => setTemperamentFilter(e.target.value)}
+            >
+              <option>Select</option>
+              {temperament.map((item) => {
+                return (
+                  <option key={item.id} value={item.name}>
+                    {item.name}
+                  </option>
+                );
+              })}
+            </select>
+          )}
+
+            </div>
+            <div id="pages">
             <button name="prev" className="pageButton" onClick={handleButtonClick}>{"<<<"}</button>
             <button name="next" className="pageButton" onClick={handleButtonClick}>{">>>"}</button>
+            </div>
+            
             <ul className="card-grid">
                 {visiblePage.length && visiblePage.map(item=>{
                 return <DogCard dog={item}

@@ -171,7 +171,7 @@ router.post("/dog", async (req, res) => {
 
     res.json(dog)
   } catch (err) {
-    res.status(400).send({error : "La informacion emitida ha sido incorrecta por lo que no se ha creado la nueva raza"});
+    res.status(404).send({error : "La informacion emitida ha sido incorrecta por lo que no se ha creado la nueva raza"});
   }
 
 });
