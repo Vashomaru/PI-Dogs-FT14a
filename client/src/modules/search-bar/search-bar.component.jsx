@@ -1,7 +1,7 @@
 import { useState , useEffect } from 'react'
 
 function SearchBar(props){
-    const { state , setState } = props
+    const { state , setState , origin , type , order , temperamentFilter } = props
     const stateToFilter = [...state]
     const [searchBarState, setSearchBarState] = useState("")
 
