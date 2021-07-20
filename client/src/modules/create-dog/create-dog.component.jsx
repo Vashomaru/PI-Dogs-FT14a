@@ -15,8 +15,8 @@ function CreateDog() {
   const history = useHistory();
 
   const [name, setName] = useState("");
-  const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState([0,0]);
+  const [height, setHeight] = useState([0,0]);
   const [image, setImage] = useState("");
   const [lifeSpan, setLifeSpan] = useState([0,0]);
   const [temperamentState, setTemperamentState] = useState([]);
@@ -64,29 +64,59 @@ function CreateDog() {
         setName(e.target.value);
         break;
 
-      case "weight":
-        setWeight(e.target.value);
+      case "weight0":
+          const parsedWeight = Number.parseInt(e.target.value)
+          if(parsedWeight && parsedWeight > 0 && parsedWeight <= 250){
+            setWeight([parsedWeight, weight[1]]);
+          }
+          if(parsedWeight && parsedWeight > 250){
+            setWeight([250, weight[1]]);
+          }
+        break;
+      case "weight1":
+          const parsedWeight2 = Number.parseInt(e.target.value)
+          if(parsedWeight2 && parsedWeight2 > 0 && parsedWeight2 <= 250){
+            setWeight([weight[0] , parsedWeight2]);
+          }
+          if(parsedWeight2 && parsedWeight2 > 250){
+            setWeight([weight[0], 250]);
+          }
         break;
 
-      case "height":
-        setHeight(e.target.value);
+      case "height0":
+          const parsedHeight = Number.parseInt(e.target.value)
+          if(parsedHeight && parsedHeight > 0 && parsedHeight <= 250){
+            setHeight([parsedHeight, height[1]]);
+          }
+          if(parsedHeight && parsedHeight > 250){
+            setHeight([250, height[1]]);
+          }
+        break;
+      case "height1":
+          const parsedHeight2 = Number.parseInt(e.target.value)
+          if(parsedHeight2 && parsedHeight2 > 0 && parsedHeight2 <= 250){
+            setHeight([height[0] , parsedHeight2]);
+          }
+          if(parsedHeight2 && parsedHeight2 > 250){
+            setHeight([height[0], 250]);
+          }
         break;
 
       case "lifeSpan0":
-          const parsed = Number.parseInt(e.target.value)
-          if(parsed && parsed > 0 && parsed <= 30){
-            setLifeSpan([parsed, lifeSpan[1]]);
+          const parsedLifeSpan = Number.parseInt(e.target.value)
+          if(parsedLifeSpan && parsedLifeSpan > 0 && parsedLifeSpan <= 30){
+            setLifeSpan([parsedLifeSpan, lifeSpan[1]]);
           }
-          if(parsed && parsed > 30){
+          if(parsedLifeSpan && parsedLifeSpan > 30){
             setLifeSpan([30, lifeSpan[1]]);
           }
         break;
-    case "lifeSpan1":
-          const parsed2 = Number.parseInt(e.target.value)
-          if(parsed2 && parsed2 > 0 && parsed2 <= 30){
-            setLifeSpan([lifeSpan[0] , parsed2]);
+      case "lifeSpan1":
+          const parsedLifeSpan2 = Number.parseInt(e.target.value)
+          if(parsedLifeSpan2 && parsedLifeSpan2 > 0 && parsedLifeSpan2 <= 30){
+            setLifeSpan([lifeSpan[0] , parsedLifeSpan2]);
           }
-          if(parsed2 && parsed2 > 30){
+          if(parsedLifeSpan2 && parsedLifeSpan2 > 30){
             setLifeSpan([lifeSpan[0], 30]);
           }
         break;
@@ -123,22 +153,55 @@ function CreateDog() {
             value={name}
             onChange={handleChange}
           />
+
+
           <label htmlFor="weight">Type the weight</label>
-          <input
-            name="weight"
-            id="weight"
-            type="text"
-            value={weight}
-            onChange={handleChange}
-          />
+          <div id="weight">
+            <input
+                name="weight0"
+                type="number"
+                min="0"
+                step="1"
+                value={weight[0]}
+                onChange={handleChange}
+            />
+            <span> to </span>
+            <input
+                name="weight1"
+                type="number"
+                min="0"
+                step="1"
+                value={weight[1]}
+                onChange={handleChange}
+            />
+            <span> kgs. </span>
+          </div>
+          
+
+
           <label htmlFor="height">Type the height</label>
-          <input
-            name="height"
-            id="height"
-            type="text"
-            value={height}
-            onChange={handleChange}
-          />
+          <div id="height">
+            <input
+                name="height0"
+                type="number"
+                min="0"
+                step="1"
+                value={height[0]}
+                onChange={handleChange}
+            />
+            <span> to </span>
+            <input
+                name="height1"
+                type="number"
+                min="0"
+                step="1"
+                value={height[1]}
+                onChange={handleChange}
+            />
+            <span> cms. </span>
+          </div>
+          
+
           <label htmlFor="lifeSpan">Choose the life span range</label>
           <div id="lifeSpan">
             <input
@@ -149,6 +212,7 @@ function CreateDog() {
                 value={lifeSpan[0]}
                 onChange={handleChange}
             />
+            <span> to </span>
             <input
                 name="lifeSpan1"
                 type="number"
@@ -158,7 +222,9 @@ function CreateDog() {
                 value={lifeSpan[1]}
                 onChange={handleChange}
             />
+            <span> years </span>
           </div>
+
           
           <label htmlFor="image">Type the image URL</label>
           <input
@@ -168,6 +234,8 @@ function CreateDog() {
             value={image}
             onChange={handleChange}
           />
+
+
           <label htmlFor="temperaments">Choose the temperaments</label>
           {temperaments.length && (
             <select
