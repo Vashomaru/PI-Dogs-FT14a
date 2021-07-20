@@ -66,3 +66,17 @@ p{
 ul {
   list-style-type: none;
 }
+
+.CreateDog{
+  display: grid;
+  grid-template-columns: repeat(12 , 1 fr);
+}
+
+.CreateDog img{
+  /* clip-path: ellipse(28% 43% at 76% 56%); */
+  clip-path: ellipse(20% 51% at 70% 55%);
+}
+
+/* .create-dog.link-button{
+
+} */
