@@ -60,23 +60,33 @@ p{
 }
 
 .grid-item {
-  grid-column-start: span 2;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
 }
 
 ul {
   list-style-type: none;
 }
 
-.CreateDog{
+/* .CreateDog{
   display: grid;
-  grid-template-columns: repeat(12 , 1 fr);
-}
+  grid-template-columns: repeat(10 , 10% [col-start]);
+  grid-template-rows: repeat(5 , auto [row-start]);
+} */
 
 .CreateDog img{
   /* clip-path: ellipse(28% 43% at 76% 56%); */
   clip-path: ellipse(20% 51% at 70% 55%);
 }
 
-/* .create-dog.link-button{
+.error{
+  color: rgb(223, 51, 8);
+  font-style: italic;
+}
 
-} */
+.create-dog.link-button{
+  grid-column-start: 1;
+  grid-row-start: 2;
+}

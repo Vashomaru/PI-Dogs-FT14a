@@ -1,19 +1,24 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector} from "react-redux";
 import { getTemperaments, getDogs } from "../../store/actions";
 import LinkButton from "../link-button/link-button.component";
 
 function Landing() {
   const dispatch = useDispatch();
+  const temperaments = useSelector((state) => state.temperaments);
+  //const dogs = useSelector((state) => state.dogList);
   useEffect(() => {
     dispatch(getTemperaments());
-    dispatch(getDogs());
   }, []);
+
+  useEffect(()=>{
+      if(temperaments.length > 0) dispatch(getDogs());
+  }, [temperaments])
 
   return (
     <div className="Landing">
         <div className="Img-Container">
-            <h1>SOY LANDING</h1>
+            <h1>Welcome to Henry Dogs</h1>
             <LinkButton route="/dogs" value="Entrar al sitio" />
         </div>      
     </div>

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getTemperaments , getDogs } from "../../store/actions";
+import { getTemperaments , refreshDogList } from "../../store/actions";
 import LinkButton from "../link-button/link-button.component";
 import Header from "../header/header.component";
 import Footer from "../footer/footer.component";
@@ -78,8 +78,11 @@ function CreateDog() {
             const response = await axios.post("http://localhost:3001/dog", body)
             
             if(response.data.result === "La nueva raza se ha creado con exito"){
-                dispatch(getDogs)
-                history.push("/dogs")
+                dispatch(refreshDogList())
+                setTimeout(()=>{
+                    history.push("/dogs")
+                },2000)
+                
             }
             
         }
@@ -234,8 +237,9 @@ function CreateDog() {
             type="text"
             value={name}
             onChange={handleChange}
-          />
-
+          /> 
+          {nameError && <label className="error">{nameError}</label>}
+          <br/>
           <label htmlFor="weight">Type the weight</label>
           <div id="weight">
             <input
@@ -257,6 +261,8 @@ function CreateDog() {
             />
             <span> kgs. </span>
           </div>
+          {weightError && <label className="error">{weightError}</label>}
+          <br/>
 
           <label htmlFor="height">Type the height</label>
           <div id="height">
@@ -279,6 +285,8 @@ function CreateDog() {
             />
             <span> cms. </span>
           </div>
+          {heightError && <label className="error">{heightError}</label>}
+          <br/>
 
           <label htmlFor="lifeSpan">Choose the life span range</label>
           <div id="lifeSpan">
@@ -302,6 +310,8 @@ function CreateDog() {
             />
             <span> years </span>
           </div>
+          {lifeSpanError && <label className="error">{lifeSpanError}</label>}
+          <br/>
 
           <label htmlFor="image">Type the image URL</label>
           <input
@@ -311,6 +321,8 @@ function CreateDog() {
             value={image}
             onChange={handleChange}
           />
+          {imageError && <label className="error">{imageError}</label>}
+          <br/>
 
           <label htmlFor="temperaments">Choose the temperaments</label>
           {temperaments.length && (
@@ -329,6 +341,8 @@ function CreateDog() {
               })}
             </select>
           )}
+          {temperamentError && <label className="error">{temperamentError}</label>}
+          <br/>
 
           <input type="submit" value="Submit" />
         </form>

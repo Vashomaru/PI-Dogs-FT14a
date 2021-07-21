@@ -12,10 +12,10 @@ async function fillDB() {
   const tempIDs = await Temperament.findAll()
   const dbClean = []
 
-  for (let i = 0; i < data.length; i++) {
+
+  for (let i = 0; i < data.length; i++) { 
     if (data[i].temperament) {
       let aux = data[i].temperament.split(",")
-
       let auxIDsArray = aux.map(item => {
         let trimmed = item.trim()
         let index = tempIDs.findIndex(temp => temp.name === trimmed)

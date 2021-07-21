@@ -64,3 +64,17 @@ export function getDogDetail(id) {
   };
 }
 
+export function refreshDogList() {
+  return async function (dispatch) {
+    try {
+      const dogList = await axios.get(`http://localhost:3001/dogs`);
+        return dispatch({
+          type: "REFRESH_DOGLIST",
+          payload: dogList.data,
+        });  
+    } catch (err) {
+      console.log(err);
+    }
+  };
+}
+

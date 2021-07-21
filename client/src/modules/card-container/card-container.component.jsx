@@ -12,25 +12,46 @@ function CardContainer(props) {
   const [type, setType] = useState("NAME");
   const [temperamentFilter, setTemperamentFilter] = useState("");
   const [originFilter, setOriginFilter] = useState("ALL");
+  const [clicked , setClicked] = useState(false)
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    console.log("this is name", e.target.name, "this is value", e.target.value);
     if (e.target.name === "next" && cardState.length / (pageIndex * 8) > 1)
       setPageIndex(pageIndex + 1);
     if (e.target.name === "prev" && pageIndex > 1) setPageIndex(pageIndex - 1);
     if (e.target.name === "order") {
-      if (e.target.value === order) setOrder("DESC");
-      if (e.target.value !== order) setOrder("ASC");
+      if (e.target.value === order){
+          if(!clicked) setClicked(true)
+          setOrder("DESC");
+      } 
+      if (e.target.value !== order){
+        if(!clicked) setClicked(true)
+        setOrder("ASC");
+    }  
     }
     if (e.target.name === "type") {
-      if (e.target.value === type) setType("WEIGHT");
-      if (e.target.value !== type) setType("NAME");
+      if (e.target.value === type){
+        if(!clicked) setClicked(true)
+        setType("WEIGHT");
+      }
+      if (e.target.value !== type){
+        if(!clicked) setClicked(true)
+        setType("NAME");
+      } 
     }
     if (e.target.name === "origin") {
-      if (originFilter === "ALL") setOriginFilter("OLD");
-      if (originFilter === "OLD") setOriginFilter("NEW");
-      if (originFilter === "NEW") setOriginFilter("ALL");
+      if (originFilter === "ALL"){
+        if(!clicked) setClicked(true) 
+        setOriginFilter("OLD");
+      } 
+      if (originFilter === "OLD"){
+        if(!clicked) setClicked(true) 
+        setOriginFilter("NEW");  
+      } 
+      if (originFilter === "NEW"){
+        if(!clicked) setClicked(true) 
+        setOriginFilter("ALL");
+      } 
     }
     return;
   };
@@ -57,6 +78,7 @@ function CardContainer(props) {
         origin={originFilter}
         type={type}
         temperamentFilter={temperamentFilter}
+        clicked={clicked}
       />
       <label htmlFor="sort">Sort by:</label>
       <div id="sort">
@@ -79,7 +101,10 @@ function CardContainer(props) {
           <select
             name="temperaments"
             id="temperaments"
-            onChange={(e) => setTemperamentFilter(e.target.value)}
+            onChange={(e) =>{
+                if(!clicked) setClicked(true)
+                setTemperamentFilter(e.target.value)
+            } }
           >
             <option></option>
             {temperament.map((item) => {

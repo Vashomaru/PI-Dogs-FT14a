@@ -12,10 +12,12 @@ function Home() {
   const dogs = useSelector((state) => state.dogList);
 
   useEffect(() => {
-    if (temperaments.length < 1) {
-      dispatch(getTemperaments());
-    }
-    if (dogs.length < 1) {
+    if(temperaments.length < 1) dispatch(getTemperaments());
+    
+  }, []);
+
+  useEffect(() => {
+    if (dogs.length < 1 && temperaments.length > 0) {
       dispatch(getDogs());
     }
   }, [temperaments, dogs]);

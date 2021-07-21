@@ -31,6 +31,11 @@ export default function rootReducer(state = initialState , action){
                 ...state ,
                 detail : {error : action.payload}
             }
+        case "REFRESH_DOGLIST" :
+            return{
+                ...state ,
+                dogList : action.payload
+            }
         default:
             return state
     }
